@@ -262,3 +262,4 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, User?>
 
 // --- 9. Beer Command (uden LiteBus) ---
 public record TabBeerCommand(int Amount);
+

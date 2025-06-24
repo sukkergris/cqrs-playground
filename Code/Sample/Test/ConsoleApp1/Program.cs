@@ -1,20 +1,14 @@
-#:package LiteBus@2.0.0
-#:package LiteBus.Commands@2.0.0
-#:package LiteBus.Commands.Abstractions@2.0.0
-#:package LiteBus.Commands.Extensions.MicrosoftDependencyInjection@2.0.0
-#:package LiteBus.Events@2.0.0
-#:package LiteBus.Events.Abstractions@2.0.0
-#:package LiteBus.Events.Extensions.MicrosoftDependencyInjection@2.0.0
-#:package LiteBus.Extensions.MicrosoftDependencyInjection@2.0.0
-#:package LiteBus.Messaging@2.0.0
-#:package LiteBus.Messaging.Abstractions@2.0.0
-#:package LiteBus.Messaging.Extensions.MicrosoftDependencyInjection@2.0.0
-#:package LiteBus.Queries@2.0.0
-#:package LiteBus.Queries.Abstractions@2.0.0
-#:package LiteBus.Queries.Extensions.MicrosoftDependencyInjection@2.0.0
-#:package Microsoft.Extensions.DependencyInjection@10.0.0-preview.5.25277.114
-#:package Microsoft.Extensions.Hosting@10.0.0-preview.5.25277.114
-#:package Microsoft.Extensions.Hosting.Abstractions@10.0.0-preview.5.25277.114
+﻿// #:package LiteBus
+// #:package LiteBus.Extensions.MicrosoftDependencyInjection
+// #:package LiteBus.Messaging.Extensions.MicrosoftDependencyInjection
+// #:package LiteBus.Commands.Extensions.MicrosoftDependencyInjection
+// #:package LiteBus.Events.Extensions.MicrosoftDependencyInjection
+// #:package LiteBus.Messaging.Extensions.MicrosoftDependencyInjection
+// #:package Microsoft.Extensions.Hosting@10.0.0-preview.5.25277.114
+// #:package Microsoft.Extensions.Hosting.Abstractions@10.0.0-preview.5.25277.114
+// #:package LiteBus.Queries.Extensions.MicrosoftDependencyInjection
+// #:package LiteBus.Queries.Abstractions
+// #:package LiteBus.Commands.Abstractions
 
 using LiteBus.Commands.Abstractions;
 using LiteBus.Commands.Extensions.MicrosoftDependencyInjection;
@@ -27,50 +21,48 @@ using Microsoft.Extensions.Logging;
 using LiteBus.Messaging.Extensions.MicrosoftDependencyInjection;
 using LiteBus.Queries.Extensions.MicrosoftDependencyInjection;
 
-namespace CqrsWithLiteBus.ConsoleService;
-
-// --- Main Program Entry Point ---
-public class Program
+namespace CqrsWithLiteBus.ConsoleService
 {
-    public static async Task Main(string[] args)
+    // --- Main Program Entry Point ---
+    public class Program
     {
-        await Host.CreateDefaultBuilder(args)
-            .ConfigureServices((hostContext, services) =>
-            {
-                // --- 1. Service Registration ---
-                services.AddSingleton<UserRepository>();
-
-                services.AddLiteBus(liteBus =>
+        public static async Task Main(string[] args)
+        {
+            await Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) =>
                 {
+                    // --- 1. Service Registration ---
+                    services.AddSingleton<UserRepository>();
 
-
-                    var assembly = typeof(Program).Assembly;
-
-                    liteBus.AddCommandModule(module =>
+                    services.AddLiteBus(liteBus =>
                     {
-                        module.RegisterFromAssembly(assembly);
+                        var assembly = typeof(Program).Assembly;
+
+                        liteBus.AddCommandModule(module =>
+                        {
+                            module.RegisterFromAssembly(assembly);
+                        });
+
+                        liteBus.AddQueryModule(module =>
+                        {
+                            module.RegisterFromAssembly(assembly);
+                        });
+
+                        // Registrer Event Module (selvom det ikke bruges i dette eksempel,
+                        // er det god praksis at have med, hvis systemet skal udvides)
+                        liteBus.AddEventModule(module =>
+                        {
+                            module.RegisterFromAssembly(assembly);
+                        });
                     });
 
-                    liteBus.AddQueryModule(module =>
-                    {
-                        module.RegisterFromAssembly(assembly);
-                    });
-
-                    // Registrer Event Module (selvom det ikke bruges i dette eksempel,
-                    // er det god praksis at have med, hvis systemet skal udvides)
-                    liteBus.AddEventModule(module =>
-                    {
-                        module.RegisterFromAssembly(assembly);
-                    });
-                });
-
-                // Register the main application logic as a Hosted Service.
-                // The Host will now manage its lifecycle (StartAsync/StopAsync).
-                services.AddHostedService<ChatSimulatorService>();
-            })
-            .Build()
-            .RunAsync();
-
+                    // Register the main application logic as a Hosted Service.
+                    // The Host will now manage its lifecycle (StartAsync/StopAsync).
+                    services.AddHostedService<ChatSimulatorService>();
+                })
+                .Build()
+                .RunAsync();
+        }
     }
 
     // --- 2. The Application Logic as a Hosted Service ---
