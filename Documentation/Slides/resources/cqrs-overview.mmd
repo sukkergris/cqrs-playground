@@ -1,0 +1,5 @@
+graph TD
+    User[User] -->|Send Command| CommandHandler[Command Handler]
+    CommandHandler -->|Publish Event| EventBus[Event Bus]
+    EventBus -->|Update Read Model| QueryHandler[Query Handler]
+    User -->|Query Data| QueryHandler

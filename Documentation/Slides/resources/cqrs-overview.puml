@@ -1,0 +1,13 @@
+@startuml cqrs
+
+actor User
+participant CommandHandler
+participant QueryHandler
+participant EventBus
+
+User -> CommandHandler: Send Command
+CommandHandler -> EventBus: Publish Event
+EventBus -> QueryHandler: Update Read Model
+User -> QueryHandler: Query Data
+
+@enduml

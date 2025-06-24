@@ -1,0 +1,17 @@
+@BeerTapApi_HostAddress = http://localhost:5049
+
+GET {{BeerTapApi_HostAddress}}/users/138932ee-e8d4-4cd7-b773-353f75118e3d
+Accept: application/json
+
+###
+
+POST {{BeerTapApi_HostAddress}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Test User",
+  "email": "testuser@example.com"
+}
+
+###
