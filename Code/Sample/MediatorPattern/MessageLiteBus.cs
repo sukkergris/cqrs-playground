@@ -92,7 +92,9 @@ public class Program
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             _logger.LogInformation("--- Chat Simulator Service Starting ---");
+            Console.ResetColor();
 
             // Create a DI scope to resolve services
             using (var scope = _serviceProvider.CreateScope())
@@ -104,13 +106,17 @@ public class Program
                 await userRepository.AddAsync(new User("Alice"));
                 await userRepository.AddAsync(new User("Bob"));
 
+                Console.ForegroundColor = ConsoleColor.Green;
                 _logger.LogInformation("--- Users Initialized. Starting Simulation ---");
+                Console.ResetColor();
 
                 var command = new SendMessageCommand("Alice", "Hey Bob, this works great in a console service!");
                 await commandMediator.SendAsync(command, cancellationToken);
             }
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             _logger.LogInformation("--- Simulation Complete. Application will now shut down. ---");
+            Console.ResetColor();
 
             // Trigger a graceful shutdown of the host
             _appLifetime.StopApplication();
@@ -176,8 +182,12 @@ public class Program
 
         public async Task HandleAsync(SendMessageCommand command, CancellationToken cancellationToken)
         {
+            Console.ForegroundColor = ConsoleColor.Magenta;
             _logger.LogInformation("[CommandHandler]: Processing message from {SenderName}.", command.SenderName);
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Cyan;
             _logger.LogInformation("[{Sender} -> Others]: '{Message}'", command.SenderName, command.Message);
+            Console.ResetColor();
             await _eventPublisher.PublishAsync(new NewMessagePublishedEvent(command.SenderName, command.Message), cancellationToken);
         }
     }
@@ -201,7 +211,9 @@ public class Program
         public PushNotificationEventHandler(ILogger<PushNotificationEventHandler> logger) => _logger = logger;
         public Task HandleAsync(NewMessagePublishedEvent @event, CancellationToken cancellationToken)
         {
+            Console.ForegroundColor = ConsoleColor.Blue;
             _logger.LogInformation("[PushNotifier]: Sending push for message from '{Author}'.", @event.Author);
+            Console.ResetColor();
             return Task.CompletedTask;
         }
     }
@@ -212,7 +224,9 @@ public class Program
         public ArchivingEventHandler(ILogger<ArchivingEventHandler> logger) => _logger = logger;
         public Task HandleAsync(NewMessagePublishedEvent @event, CancellationToken cancellationToken)
         {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             _logger.LogInformation("[Archiver]: Storing message '{Content}' in the archive.", @event.Content);
+            Console.ResetColor();
             return Task.CompletedTask;
         }
     }
