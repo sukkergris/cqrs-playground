@@ -10,6 +10,8 @@ public class ResolveAndFireICommands
     public void Shout_Command_With_Success()
     {
         var services = new ServiceCollection();
+
+        services.AddSingleton<Repository>();
         
         services.AddSingleton<Messages>();
         services.AddHandlers([new Assemblymarker()]);
@@ -28,16 +30,20 @@ public class ResolveAndFireICommands
         Assert.NotEmpty(response.Value);
     }
 }
-
+public class Repository{}
 public sealed class StrangeQuery(string query) : IQuery<Result<string>>
 {
     public string Query { get; } = query;
 }
 
-public sealed class StrangeQureyHandler : IQueryHandler<StrangeQuery, Result<string>>
+public sealed class StrangeQureyHandler(Messages messages, Repository repos) : IQueryHandler<StrangeQuery, Result<string>>
 {
+    private readonly Messages _messages = messages;
+    private readonly Repository _repos = repos;
+
     public Result<string> Handle(StrangeQuery query)
     {
+        // _messages.Dispatch(new SomeComandOrQuery);
         return Result.Success($"You queried {query.Query}!");
     }
 }
