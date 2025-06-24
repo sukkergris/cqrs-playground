@@ -251,7 +251,8 @@ public record GetUserByIdQuery(Guid Id) : IQuery<User?>;
 public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, User?>
 {
     private readonly UserRepository _userRepository;
-    public GetUserByIdQueryHandler(UserRepository userRepository) => _userRepository = userRepository;
+    public GetUserByIdQueryHandler(UserRepository userRepository,
+        IQueryMediator mediator) => _userRepository = userRepository;
 
     public Task<User?> HandleAsync(GetUserByIdQuery query, CancellationToken cancellationToken)
     {
