@@ -5,9 +5,10 @@ namespace WeKnowMediatr;
 
  public static class HandlerRegistration
     {
-        public static void AddHandlers(this IServiceCollection services)
+        public static void AddHandlers(this IServiceCollection services, object[] assemblymarkers)
         {
-            List<Type> handlerTypes = typeof(ICommand).Assembly.GetTypes()
+            List<Type> handlerTypes =
+                assemblymarkers.SelectMany(o=> o.GetType().Assembly.GetTypes())
                 .Where(x => x.GetInterfaces().Any(y => IsHandlerInterface(y)))
                 .Where(x => x.Name.EndsWith("Handler"))
                 .ToList();
