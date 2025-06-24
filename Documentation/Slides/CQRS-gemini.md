@@ -195,6 +195,20 @@ Dette er perfekt til Cross-Cutting Concerns som validering, logging, transaktion
 
 ---
 
+## Mediator Pattern: Afkobling og struktur
+Mediator patternet er et designmønster, der hjælper med at afkoble afsendere og modtagere af beskeder i et system.
+
+- **Formål:** Gør det muligt for objekter at kommunikere uden at kende direkte til hinanden.
+- **Hvordan?** Alle beskeder (commands, queries, events) sendes til en central mediator, som sørger for at dirigere dem til den rette handler.
+- **Fordele:**
+  - Mindre kobling mellem komponenter
+  - Lettere at udvide og teste
+  - Giver et centralt sted til cross-cutting concerns (logging, validering, transaktioner)
+
+I .NET kan mediator patternet implementeres med biblioteker som LiteBus eller MediatR.
+
+---
+
 # DEL 3: DISKUSSION & OPSAMLING
 
 ## Evolutionært Design: Anvend mønstre med omhu

@@ -15,3 +15,13 @@ Accept: application/json
 }
 
 ###
+
+POST {{BeerTapApi_HostAddress}}/beer/tab
+Content-Type: application/json
+Accept: application/json
+
+{
+  "amount": 2
+}
+
+###

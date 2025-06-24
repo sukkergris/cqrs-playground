@@ -41,6 +41,7 @@ builder.Services.AddLiteBus(liteBus =>
 });
 
 builder.Services.AddSingleton<UserRepository>();
+builder.Services.AddSingleton<BeerRepository>();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddOpenApi();
@@ -96,11 +97,58 @@ usersGroup.MapPut("/{id:guid}", async (Guid id, [FromBody] UpdateUserDetailsDto 
 .WithName("UpdateUser")
 .Produces(StatusCodes.Status204NoContent);
 
+var beerGroup = app.MapGroup("/beer");
+
+beerGroup.MapPost("/tab", ([FromBody] TabBeerRequest request, BeerRepository beerRepository) =>
+{
+    try
+    {
+        var command = new TabBeerCommand(request.Amount);
+        beerRepository.Tab(command.Amount);
+        return Results.Ok(new { message = $"{command.Amount} beer(s) tapped! Remaining: {beerRepository.GetStock()}" });
+    }
+    catch (ArgumentException ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+    catch (InvalidOperationException ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+})
+.WithName("TabBeer")
+.Produces<object>(StatusCodes.Status200OK)
+.Produces<object>(StatusCodes.Status400BadRequest);
+
 app.Run();
 
 // --- 4. Modeller & DTOs ---
 public record User(Guid Id, string Name, string Email);
 public record UpdateUserDetailsDto(string Name, string Email);
+public record TabBeerRequest(int Amount);
+
+public class BeerRepository
+{
+    private int _stock = 10; // Demo: start med 10 øl
+    private readonly object _lock = new();
+
+    public int GetStock()
+    {
+        lock (_lock) { return _stock; }
+    }
+
+    public void Tab(int amount)
+    {
+        lock (_lock)
+        {
+            if (amount <= 0)
+                throw new ArgumentException("Amount must be greater than zero.");
+            if (_stock < amount)
+                throw new InvalidOperationException("Not enough beer left!");
+            _stock -= amount;
+        }
+    }
+}
 
 // --- 5. Data Persistence ---
 public class UserRepository
@@ -210,3 +258,6 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, User?>
         return _userRepository.GetByIdAsync(query.Id);
     }
 }
+
+// --- 9. Beer Command (uden LiteBus) ---
+public record TabBeerCommand(int Amount);
