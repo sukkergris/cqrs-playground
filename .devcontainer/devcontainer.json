@@ -1,0 +1,26 @@
+{
+  "name": "Full dotnet environment",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "dev",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                // Set bash as the default terminal (installed in Dockerfile)
+                "terminal.integrated.defaultProfile.linux": "zsh"
+                // Optional Neovim integration path:
+                // "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim"
+            },
+            "extensions": [
+              "ms-vscode-remote.remote-containers",
+              "ms-dotnettools.csdevkit",
+              "EditorConfig.EditorConfig",
+              "ms-dotnettools.csharp",
+              "humao.rest-client"
+            ]
+        }
+    },
+    // The user VS Code should run as inside the service container.
+    // Should match the user the service runs as (root in this case).
+    "remoteUser": "root"
+}

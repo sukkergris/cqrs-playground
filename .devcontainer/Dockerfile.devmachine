@@ -1,0 +1,23 @@
+# Use the official .NET 10 Preview SDK image as a base
+FROM mcr.microsoft.com/dotnet/nightly/sdk:10.0-preview
+
+# It's good practice to declare arguments you might want to change easily
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Update package lists, install desired packages (e.g., git),
+# and clean up in a single RUN command to reduce image layer size.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        # Add any packages you need here, for example:
+        git \
+        curl \
+        unzip \
+        stow \
+        vim \
+    && \
+    # Clean up the apt cache to keep the image size small
+    rm -rf /var/lib/apt/lists/*
+    
+# Remove the bash configuration file for the root user
+# This can help ensure a clean, predictable environment for scripts.
+RUN rm /root/.bashrc 

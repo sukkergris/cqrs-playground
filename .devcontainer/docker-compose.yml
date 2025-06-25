@@ -1,0 +1,9 @@
+name: "Dotnet sdk dev machine"
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.devmachine
+    volumes:
+      - ..:/workspace
+    command: sleep infinity
