@@ -16,7 +16,8 @@
               "ms-dotnettools.csdevkit",
               "EditorConfig.EditorConfig",
               "ms-dotnettools.csharp",
-              "humao.rest-client"
+              "humao.rest-client",
+              "ms-dotnettools.vscodeintellicode-csharp"
             ]
         }
     },
