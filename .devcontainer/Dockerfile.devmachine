@@ -13,10 +13,21 @@ RUN apt-get update && \
         curl \
         unzip \
         stow \
-        vim \
+        zsh \
     && \
     # Clean up the apt cache to keep the image size small
     rm -rf /var/lib/apt/lists/*
+
+RUN dotnet tool install --global csharp-ls
+ENV PATH="$PATH:~/.dotnet/tools"
+
+# Example downloading Neovim ARM64 binary in Dockerfile
+ARG NVIM_VERSION=v0.11.0
+# Or use "stable" / "nightly" in URL pattern (ensure ARM64 exists for that tag)
+
+RUN curl -L -o /tmp/nvim.tar.gz https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-arm64.tar.gz \
+    && tar -C /usr/local -xzf /tmp/nvim.tar.gz --strip-components=1 \
+    && rm /tmp/nvim.tar.gz
     
 # Remove the bash configuration file for the root user
 # This can help ensure a clean, predictable environment for scripts.
