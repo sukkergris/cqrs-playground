@@ -12,25 +12,25 @@ public class ResolveAndFireICommands
         var services = new ServiceCollection();
 
         services.AddSingleton<Repository>();
-        
+
         services.AddSingleton<Messages>();
         services.AddHandlers([new Assemblymarker()]);
-        
+
         var serviceProvider = services.BuildServiceProvider();
 
         var mediator = serviceProvider.GetRequiredService<Messages>();
 
         var residual = mediator.Dispatch(new ShoutCommand("These are the things I can do without!"));
-        
+
         Assert.True(residual.IsSuccess);
 
         var response = mediator.Dispatch(new StrangeQuery("Who are you?"));
-        
+
         Assert.True(response.IsSuccess);
         Assert.NotEmpty(response.Value);
     }
 }
-public class Repository{}
+public class Repository { }
 public sealed class StrangeQuery(string query) : IQuery<Result<string>>
 {
     public string Query { get; } = query;
