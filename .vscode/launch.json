@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "BeerTapApi",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build:beer-tap-api",
@@ -13,7 +13,8 @@
             "args": [],
             "cwd": "${workspaceFolder}/Code/Sample/src/BeerTapApi",
             "stopAtEntry": false,
-            "console": "internalConsole"
+            "console": "internalConsole",
+            "envFile": "${workspaceFolder}/.vscode/.env"
         }
     ]
 }
