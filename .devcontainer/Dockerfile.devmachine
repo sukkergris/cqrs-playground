@@ -14,6 +14,7 @@ RUN apt-get update && \
         unzip \
         stow \
         zsh \
+        openssh-client \
     && \
     # Clean up the apt cache to keep the image size small
     rm -rf /var/lib/apt/lists/*
