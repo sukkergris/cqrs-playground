@@ -15,6 +15,18 @@
             "stopAtEntry": false,
             "console": "internalConsole",
             "envFile": "${workspaceFolder}/.vscode/.env"
+        },
+        {
+          "name": "We know mediatOr!",
+          "type": "coreclr",
+          "request": "launch",
+          "preLaunchTask": "build:weknowmediator",
+          "program": "${workspaceFolder}/Code/HomeBrew/WeKnowMediatr/bin/net10.0/WeKnowMediar.dll",
+          "args": [],
+          "cwd": "${workspaceFolder}/Code/WeKnowMediatr",
+          "stopAtEntry": false,
+          "console": "internalConsole",
+          "envFile": "${workspaceFolder}/.vscode/.env"
         }
     ]
 }

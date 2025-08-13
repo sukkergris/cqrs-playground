@@ -18,6 +18,22 @@
         "isDefault": true
       },
       "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "build:weknowmediator",
+      "command": "dotnet",
+      "type": "process",
+      "args":[
+        "build",
+        "${workspaceFolder}/Code/WeKnowMeidatr/WeKnowMeiatr.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$msCompile"
     }
   ]
 }

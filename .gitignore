@@ -273,3 +273,4 @@ __pycache__/
 # Logfiles during development
 **/logfiles/
 .env
+.DS_Store
